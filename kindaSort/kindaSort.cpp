@@ -1,4 +1,5 @@
 /* 
+
    Santiago Andaluz Ruiz
  */
 #include <iostream>
@@ -32,7 +33,7 @@ int main(){
         listOfNames.push_back(name);
         counter--;
         if(counter == 0){
-            sort(listOfNames.begin(), listOfNames.end(),custSort);
+           stable_sort(listOfNames.begin(), listOfNames.end(),custSort);
             reverse(listOfNames.begin(),listOfNames.end());
             while(!listOfNames.empty()){
                 cout << listOfNames.back() << endl;
