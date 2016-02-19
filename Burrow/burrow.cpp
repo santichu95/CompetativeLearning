@@ -1,35 +1,46 @@
 #include <iostream>
 #include <algorithm>
-#include <map>
-#include <string>
+#include <cstring>
 
 using namespace std;
+bool MyCompare(char* a, char* b){
+    unsigned int index = 0;
+    while(a[index] != '\0' && b[index] != '\0') {
+        if ( a[index] < b[index] )
+            return true;
+        else if (b[index] < a[index] )
+            return false;
+        index++;
+    }
+    return false;
+}
+
 
 int main (){
-    string temp; 
-    string shifted;
-    while ( getline(cin, temp)){
-        int n = temp.size();
-        map<string, int> list;
-        temp +=temp;
-        for ( int i = 0; i < n;i++) {
-            shifted = temp.substr(i,n);
-            if(list.find(shifted) != list.end()){
-                list[shifted] = 1;
-            }
-            else
-                list[shifted] = list[shifted] + 1;
+    char *temp = new char[100000];
+    char *shifted;
+    while (cin.getline(temp,100000,'\n')){
+        unsigned int n = strlen(temp);
+        vector<char*> list;
+        
+        strcat(temp,temp);
+        for (unsigned int i = 0; i < n;i++) {
+            shifted = temp + i;
+            list.push_back(shifted);
         }
+        
+        sort(list.begin(),list.end(),MyCompare);
 
-        for ( auto a : list) {
-            for( int i = 0; i < a.second;i ++){
-                cout << a.first[n - 1];
-            }
+        for ( char* a : list) {
+                cout << a[n - 1];
+
         }
-
+        
         list.clear();
         cout << endl;
-        
+        delete temp;
+        temp = new char[100000];
     }
+    delete temp;
     return 0;
 }
