@@ -11,8 +11,9 @@ int main (){
     while ( getline(cin, temp)){
         int n = temp.size();
         map<string, int> list;
+        temp +=temp;
         for ( int i = 0; i < n;i++) {
-            shifted = temp.substr(i) + temp.substr(0, i);
+            shifted = temp.substr(i,n);
             if(list.find(shifted) != list.end()){
                 list[shifted] = 1;
             }
@@ -26,6 +27,7 @@ int main (){
             }
         }
 
+        list.clear();
         cout << endl;
         
     }
