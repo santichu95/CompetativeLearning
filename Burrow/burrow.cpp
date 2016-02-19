@@ -36,6 +36,9 @@ int main (){
 
         }
         
+        for ( char* a : list) {
+            delete a;
+        }
         list.clear();
         cout << endl;
         delete temp;
