@@ -1,16 +1,17 @@
 #include <iostream>
+#include <algorithm>
 #include <string>
 
 using namespace std;
 
 int main (){
     string temp; 
-    while ( getline(cin, temp){
+    while ( getline(cin, temp)){
         int n = temp.size();
-        string list[n];
+        vector<string> list(n);
         for ( int i = 0; i < n;i++) 
-            list[i] = line.substr(i) + line.substr(0, n - i);
-        sort(begin(list), end(list));
+            list[i] = temp.substr(i) + temp.substr(0, i);
+        sort(list.begin(),list.end());
 
         for( string s : list)
             cout << s[n - 1];
