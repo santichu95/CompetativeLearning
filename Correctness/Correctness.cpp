@@ -35,6 +35,9 @@ int main() {
                     temp %= MOD;
                     other -= index;
                     index *= index;
+                    if ( !dec) {
+                        old.push_back(temp);
+                    }
 
                 }
                 else{
