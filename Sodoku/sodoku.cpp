@@ -1,25 +1,27 @@
-// A Backtracking program  in C++ to solve Sudoku problem
-#include <stdio.h>
 #include <iostream>
 
 using namespace std;
  
-// UNASSIGNED is used for empty cells in sudoku grid
-#define UNASSIGNED 0
- 
-// N is used for size of Sudoku grid. Size will be NxN
 #define N 9
+
+int answer[N][N];
 
 // Checks whether it will be legal to assign num to the given row,col
 bool isSafe(int grid[N][N], int row, int col, int num);
- 
+
+void printGrid(int grid[N][N]);
+
+bool FindUnassignedLocation(int grid[N][N]);
+
+void copyGrid(int orig[N][N], int copy[N][N] );
+
 /* Takes a partially filled-in grid and attempts to assign values to
   all unassigned locations in such a way to meet the requirements
   for Sudoku solution (non-duplication across rows, columns, and boxes) */
 bool SolveSudoku(int grid[N][N], int row, int col, int &counter){
-    int tempRow, tempCol;
+    int tempRow, tempCol, tempAns;
     
-    if ( row == 9 && col == 0) {
+    if ( !FindUnassignedLocation(grid) ) {
         return true;
     }
 
@@ -32,72 +34,65 @@ bool SolveSudoku(int grid[N][N], int row, int col, int &counter){
             {
                 //Temp addition
                 grid[row][col] = num;
+                //printGrid(grid);
 
                 if( col == 8 ) {
                     tempCol = 0;
                     tempRow = row + 1;
                 } else {
                     tempCol = col + 1;
+                    tempRow = row;
                 }
      
                 if (SolveSudoku(grid,tempRow, tempCol, counter)) {
-                    cout << "Trigger\n\n";
+                    copyGrid(grid,answer);
                     counter++;
                 }
 
                 //Undoing the addition
-                grid[row][col] = UNASSIGNED;
+                grid[row][col] = 0;
 
             }
         }
     } else {
-        if( col == 8 ) {
-            tempCol = 0;
-            tempRow = row + 1;
+
+        tempAns = grid[row][col];
+        grid[row][col] = 0;
+        if ( isSafe(grid, row, col, tempAns) ) {
+            if (col == 8) {
+                tempCol = 0;
+                tempRow = row + 1;
+            } else {
+                tempCol = col + 1;
+                tempRow = row;
+            }
+            grid[row][col] = tempAns;
+            if (SolveSudoku(grid, tempRow, tempCol, counter)) {
+                counter++;
+            }
         } else {
-            tempCol = col + 1;
+            grid[row][col] = tempAns;
         }
-        SolveSudoku(grid,tempRow,tempCol, counter);
     }
 
     return false;
-
-
-    /*
-    int row, col;
- 
-    // If there is no unassigned location, we are done
-    if (!FindUnassignedLocation(grid, row, col))
-       return true; // success!
- 
-    // consider digits 1 to 9
-    for (int num = 1; num <= 9; num++)
-    {
-        // if looks promising
-        if (isSafe(grid, row, col, num))
-        {
-            // make tentative assignment
-            grid[row][col] = num;
- 
-            // return, if success, yay!
-            if (SolveSudoku(grid))
-                return true;
- 
-            // failure, unmake & try again
-            grid[row][col] = UNASSIGNED;
-        }
-    }
-    return false; // this triggers backtracking
-    */
 }
- 
- 
+
+bool FindUnassignedLocation(int grid[N][N])
+{
+    for (int row = 0; row < N; row++)
+        for (int col = 0; col < N; col++)
+            if (grid[row][col] == 0)
+                return true;
+    return false;
+}
+
 /* Returns a boolean which indicates whether any assigned entry
    in the specified row matches the given number. */
 bool UsedInRow(int grid[N][N], int row, int num)
 {
     for (int col = 0; col < N; col++)
-        if (grid[row][col] == num)
+        if ( (grid[row][col] == num) )
             return true;
     return false;
 }
@@ -107,7 +102,7 @@ bool UsedInRow(int grid[N][N], int row, int num)
 bool UsedInCol(int grid[N][N], int col, int num)
 {
     for (int row = 0; row < N; row++)
-        if (grid[row][col] == num)
+        if ( (grid[row][col] == num) )
             return true;
     return false;
 }
@@ -116,9 +111,9 @@ bool UsedInCol(int grid[N][N], int col, int num)
    within the specified 3x3 box matches the given number. */
 bool UsedInBox(int grid[N][N], int boxStartRow, int boxStartCol, int num)
 {
-    for (int row = 0; row < 3; row++)
-        for (int col = 0; col < 3; col++)
-            if (grid[row+boxStartRow][col+boxStartCol] == num)
+    for (int tempRow = 0; tempRow < 3; tempRow++)
+        for (int tempCol = 0; tempCol < 3; tempCol++)
+            if ( (grid[tempRow+boxStartRow][tempCol+boxStartCol] == num) )
                 return true;
     return false;
 }
@@ -149,7 +144,15 @@ void printGrid(int grid[N][N])
     }
     cout << endl;
 }
- 
+
+void copyGrid(int orig[N][N], int copy[N][N]){
+    for (int row = 0; row < N; row++)
+    {
+        for (int col = 0; col < N; col++) {
+            copy[row][col] = orig[row][col];
+        }
+    }
+}
 /* Driver Program to test above functions */
 int main()
 {
@@ -170,22 +173,16 @@ int main()
             i = 0;
             counter = 0;
             SolveSudoku(grid, 0, 0, counter);
-            cout << counter << endl;
+
             if ( counter == 1) {
-                printGrid(grid);
+                printGrid(answer);
             } else if ( counter > 1) {
-                cout << "Non-unique\n";
+                cout << "Non-unique\n\n";
             } else {
-                cout << "Find another job\n";
+                cout << "Find another job\n\n";
             }
-            /*
-            if (SolveSudoku(grid, 0, 0, counter) == true)
-                  printGrid(grid);
-            else if ( counter > 0 )
-                cout << "Non-unique\n";
-            else
-                cout << "find another job\n";
-                */
+
+
         }
     }
                    
