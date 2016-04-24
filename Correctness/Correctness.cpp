@@ -11,12 +11,18 @@ int main() {
     long value, other;
     bool dec = false;
     string op;
+    unsigned int modV;
+    unsigned int modO; 
+    unsigned int temp; 
+    unsigned int index;
+    vector<unsigned int> old;
     while ( cin >> value >> op >> other) {
-        unsigned int modV = value % MOD;
-        unsigned int modO = other % MOD;
-        unsigned int temp = 1;
-        unsigned int index = 0;
-        vector<unsigned int> old;
+         modV = value % MOD; 
+         modO = other % MOD; 
+         temp = 1;           
+         index = 0;          
+         old.clear();
+
 
         if( op == "+") {
             modV += modO;

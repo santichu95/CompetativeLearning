@@ -1,0 +1,83 @@
+#include <iostream>
+#include <vector>
+
+
+using namespace std;
+
+struct rect{
+    int w,
+        h,
+        x,
+        y;
+
+    rect(){}
+
+    rect(int temp1, int temp2, int temp3, int temp4){
+        w = temp1;
+        h = temp2;
+        x = temp3;
+        y = temp4;
+    }
+};
+
+bool checkCol(rect *first, rect *second){
+    return ((first->x < (second->x + second->w)) && ((first->x + first->w) > second->x)
+        && (first->y < (second->y + second->h)) && ((first->y + first->h) >  second->y));
+}
+
+int calcMaxSize(vector<rect> *rectangles, int *maxArea){
+
+    unsigned int perm = 0;
+
+    while (perm < rectangles->size()){
+        cout << perm << " ";
+        unsigned int temp = perm;
+        unsigned int mask = 1 << (rectangles->size() - 1);
+
+        for(unsigned int i = 0; i < (rectangles.size()); i++){
+            cout << ((temp & (mask >> i)) != 0);
+        }
+        cout << endl;
+
+        perm ++;
+    }
+    
+    return *maxArea;
+}
+
+
+
+int main(){
+    int lines;
+    //int perm = 0;
+    int w,h,x,y;
+
+    int maxSize = 0;
+
+    vector<rect> stories;
+
+    while(cin >> lines){
+        if( lines != 0 ) {
+            while(lines != 0) {
+                cin >> w >> h >> x >> y;
+                stories.push_back(rect(x,h,x,y));
+                lines--;
+            }
+            
+            calcMaxSize(&stories, &maxSize);
+
+            cout << maxSize << endl;
+
+            /*
+            for ( auto var : stories ) {
+                cout << var.w << " " << var.h << " " << var.x << " " << var.y << "\n";
+            }
+            */
+
+            stories.clear();
+        }
+
+    }
+
+    return 0;
+}
