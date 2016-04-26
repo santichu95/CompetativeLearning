@@ -9,7 +9,7 @@ all: $(OBJ)
 	$(CXX) -o $(BIN) $^
 
 %.o: %.c
-	$(CSS) $@ -c $<
+	$CXX) $@ -c $<
 
 clean:
 	rm -f *.o
