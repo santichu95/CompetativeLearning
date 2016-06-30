@@ -40,22 +40,17 @@ int main () {
 
             if ( i != 0 ) {
 
-                cout << "It: " << it->first << " hashNumber:" << temp << endl;
                 while( (it->first < temp ) && it != data.end() ) {
-                    cout << "It: " << it->first << " hashNumber:" << temp;
                     it++;
                 }
                 if ( it == data.end() || (it == data.begin() && it->first != temp) ) {
-                    cout << "Check one: " << line << endl;
                     data.insert(it, make_pair(temp,line));
                     unique++;
                 }
                 else if ( it->first == temp) {
                     while ( it->first == temp) {
-                        cout << "First:" << it->second << "\nSecond:" << line << endl;
                         coll++;
                         if ( line.compare(it->second) == 0 ) {
-                           cout << "Trigger\n";
                            matched = true;
                            it++;
                            break;
@@ -68,7 +63,6 @@ int main () {
                     data.insert(it, make_pair(temp,line));
                 }
             } else {
-                cout << "First number\n"; 
                 unique++;
                 data.push_back(make_pair(temp, line));
             }
