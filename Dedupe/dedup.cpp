@@ -6,8 +6,8 @@
 #include <vector>
 #include <string>
 #include <vector>
-#include <utility>
 #include <iterator>
+#include <map>
 
 using namespace std;
 int hashString(string temp){
@@ -23,52 +23,40 @@ int hashString(string temp){
 int main () {
     int num, temp;
     int unique = 0, coll = 0;
-    vector<pair<int, string> >::iterator it;
+    vector<string>::iterator it;
 
     string line;
-    vector<pair<int,string> >data;
+    map<int, vector<string> > files;
 
     cin >> num;
     getline(cin, line);
-    
+
     bool matched = false;
 
     while( num != 0 ) {
         for ( int i = 0; i < num; i++ ) {
             getline(cin, line);
             temp = hashString(line);
-
-            if ( i != 0 ) {
-
-                while( (it->first < temp ) && it != data.end() ) {
-                    it++;
+            if ( files.empty() ) {
+                files[temp].push_back(line);
+                unique ++;
+            } else if ( files.find(temp) != files.end() ) { //Hash coll
+                it = files[temp].begin();
+                for ( ; it != files[temp].end() ; it++ ) {
+                    coll++;
+                    if ( it->compare(line) == 0 ) {
+                        matched = true;
+                    }
                 }
-                if ( it == data.end() || (it == data.begin() && it->first != temp) ) {
-                    data.insert(it, make_pair(temp,line));
+                if ( !matched ) {
                     unique++;
                 }
-                else if ( it->first == temp) {
-                    while ( it->first == temp) {
-                        coll++;
-                        if ( line.compare(it->second) == 0 ) {
-                           matched = true;
-                           it++;
-                           break;
-                        }
-                        it++;
-                    }
-                    if (!matched) {
-                        unique++;
-                    }
-                    data.insert(it, make_pair(temp,line));
-                }
-            } else {
+                files[temp].push_back(line);
+            } else {                                        //NO hash coll
                 unique++;
-                data.push_back(make_pair(temp, line));
+                files[temp].push_back(line);
             }
-            it = data.begin();
-            
-            matched = false;
+
         }
 
         cout << unique << "  " << coll << endl;
@@ -76,7 +64,9 @@ int main () {
         unique = 0;
         coll = 0;
 
-        data.clear();
+        matched = false;
+
+        files.clear();
         cin >> num;
 
         getline(cin, line);
