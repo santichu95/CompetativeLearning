@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 #include <iterator>
+#include <utility>
 #include <map>
 
 using namespace std;
@@ -38,7 +39,7 @@ int main () {
             getline(cin, line);
             temp = hashString(line);
             if ( files.empty() ) {
-                files[temp].push_back(line);
+                files.insert(make_pair(temp, vector<string>(1,line))) ;
                 unique ++;
             } else if ( files.find(temp) != files.end() ) { //Hash coll
                 it = files[temp].begin();
@@ -55,7 +56,7 @@ int main () {
                 }
             } else {                                        //NO hash coll
                 unique++;
-                files[temp].push_back(line);
+                files.insert(make_pair(temp,vector<string>(1,line))) ;
             }
 
         }
