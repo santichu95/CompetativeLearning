@@ -51,8 +51,8 @@ int main () {
                 }
                 if ( !matched ) {
                     unique++;
+                    files[temp].push_back(line);
                 }
-                files[temp].push_back(line);
             } else {                                        //NO hash coll
                 unique++;
                 files[temp].push_back(line);
