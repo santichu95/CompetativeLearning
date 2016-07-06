@@ -46,6 +46,7 @@ int main () {
                     coll++;
                     if ( it->compare(line) == 0 ) {
                         matched = true;
+                        break;
                     }
                 }
                 if ( !matched ) {
